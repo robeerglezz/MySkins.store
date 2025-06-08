@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SkinTrade - Perfil</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1a2f;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    button {
+      background: #171a21;
+      border: none;
+      color: #66c0f4;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #3a475e;
+    }
+    #user {
+      display: none;
+      margin-top: 20px;
+      align-items: center;
+      gap: 20px;
+      flex-direction: column;
+      border: 1px solid #3a475e;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 300px;
+      width: 100%;
+      text-align: center;
+    }
+    #user img {
+      border-radius: 50%;
+      width: 96px;
+      height: 96px;
+      border: 2px solid #66c0f4;
+    }
+    #loginBtn {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>SkinTrade - Perfil de Usuario</h1>
+
+  <button id="loginBtn">Iniciar sesión con Steam</button>
+
+  <div id="user">
+    <img id="userAvatar" src="" alt="Avatar" />
+    <h2 id="userName"></h2>
+    <p>ID Steam: <span id="userId"></span></p>
+    <button id="logoutBtn">Cerrar sesión</button>
+  </div>
+
+  <script>
+    const loginBtn = document.getElementById('loginBtn')
+    const userSection = document.getElementById('user')
+    const userAvatar = document.getElementById('userAvatar')
+    const userName = document.getElementById('userName')
+    const userId = document.getElementById('userId')
+    const logoutBtn = document.getElementById('logoutBtn')
+
+    loginBtn.addEventListener('click', () => {
+      window.location.href = 'https://myskins.store/auth/steam'
+    })
+
+    logoutBtn.addEventListener('click', () => {
+      fetch('https://myskins.store/logout', { credentials: 'include' })
+        .then(() => {
+          // Recarga la página después de cerrar sesión
+          window.location.href = '/'
+        })
+        .catch(err => console.error('Error cerrando sesión:', err))
+    })
+
+    // Leer datos del usuario en URL
+    const params = new URLSearchParams(window.location.search)
+    const name = params.get('name')
+    const avatar = params.get('avatar')
+    const id = params.get('id')
+
+    if (name && avatar && id) {
+      loginBtn.style.display = 'none'
+      userSection.style.display = 'flex'
+      userAvatar.src = avatar
+      userName.textContent = name
+      userId.textContent = id
+    }
+  </script>
+
+</body>
+</html>
